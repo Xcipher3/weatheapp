@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="modern-features.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3498db">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+    <div class="app-container">
+        <div class="theme-toggle-container">
+            <button id="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-toggle-icon">🌓</span>
+            </button>
+        </div>
+        
+        <div class="container">
+            <header>
+                <h1>Weather App</h1>
+                <div class="search-container">
+                    <input type="text" id="city-input" placeholder="Enter city name...">
+                    <button id="search-btn">Search</button>
+                    <button id="location-btn" title="Use my location">📍</button>
+                    <button id="voice-btn" title="Voice search">🎤</button>
+                </div>
+                
+                <div class="recent-searches" id="recent-searches">
+                    <!-- Recent searches will be displayed here -->
+                </div>
+            </header>
+            
+            <main>
+                <div class="weather-container" id="weather-container">
+                    <div class="placeholder-message" id="placeholder-message">
+                        Enter a city name to get the weather information
+                    </div>
+                    
+                    <div class="weather-card glass-card hidden" id="weather-card">
+                        <div class="weather-animation-container" id="weather-animation-container">
+                            <div class="weather-bg weather-bg-sunny" id="bg-sunny"></div>
+                            <div class="weather-bg weather-bg-clear-night" id="bg-clear-night"></div>
+                            <div class="weather-bg weather-bg-cloudy" id="bg-cloudy"></div>
+                            <div class="weather-bg weather-bg-rainy" id="bg-rainy"></div>
+                            <div class="weather-bg weather-bg-snowy" id="bg-snowy"></div>
+                            <div class="weather-bg weather-bg-stormy" id="bg-stormy"></div>
+                            <div class="weather-bg weather-bg-foggy" id="bg-foggy"></div>
+                            
+                            <div class="rain-container" id="rain-container"></div>
+                            <div class="snow-container" id="snow-container"></div>
+                            <div class="cloud-container" id="cloud-container"></div>
+                            <div class="sun-container" id="sun-container"></div>
+                            <div class="lightning-container" id="lightning-container"></div>
+                            <div class="fog-container" id="fog-container"></div>
+                            
+                            <button class="animation-toggle" id="animation-toggle" aria-label="Toggle animations">✨</button>
+                        </div>
+                        
+                        <div class="card-actions">
+                            <button id="share-btn" class="action-btn" title="Share weather">
+                                <span class="action-icon">📤</span>
+                            </button>
+                            <button id="unit-toggle" class="action-btn" title="Toggle temperature unit">
+                                <span class="action-icon">°C</span>
+                            </button>
+                        </div>
+                        
+                        <div class="location-info">
+                            <h2 id="city-name">City Name</h2>
+                            <p id="country">Country</p>
+                            <p id="local-time">Local Time</p>
+                        </div>
+                        
+                        <div class="current-weather">
+                            <div class="temperature-container">
+                                <h3 id="temperature">--°C</h3>
+                                <p id="feels-like">Feels like: --°C</p>
+                            </div>
+                            
+                            <div class="condition-container">
+                                <div class="weather-icon" id="weather-icon">
+                                    <!-- Weather icon will be inserted here -->
+                                </div>
+                                <p id="condition-text">Condition</p>
+                            </div>
+                        </div>
+                        
+                        <div class="hourly-forecast-container">
+                            <h3>Hourly Forecast</h3>
+                            <div class="hourly-forecast" id="hourly-forecast">
+                                <!-- Hourly forecast will be inserted here -->
+                            </div>
+                        </div>
+                        
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Humidity</span>
+                                <span class="detail-value" id="humidity">--%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Wind</span>
+                                <span class="detail-value" id="wind">-- km/h</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Pressure</span>
+                                <span class="detail-value" id="pressure">-- mb</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Visibility</span>
+                                <span class="detail-value" id="visibility">-- km</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">UV Index</span>
+                                <span class="detail-value" id="uv-index">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Precipitation</span>
+                                <span class="detail-value" id="precipitation">-- mm</span>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendations-container" id="recommendations-container">
+                            <h3>Recommendations</h3>
+                            <ul id="recommendations-list">
+                                <!-- Recommendations will be inserted here -->
+                            </ul>
+                        </div>
+                        
+                        <div class="data-source" id="data-source">
+                            <!-- Data source will be shown here (API or Cache) -->
+                        </div>
+                    </div>
+                    
+                    <div class="weather-map-container glass-card hidden" id="weather-map-container">
+                        <h3>Weather Map</h3>
+                        <div id="weather-map"></div>
+                    </div>
+                    
+                    <div class="forecast-container glass-card hidden" id="forecast-container">
+                        <h3>5-Day Forecast</h3>
+                        <div class="forecast-cards" id="forecast-cards">
+                            <!-- Forecast cards will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <div class="error-message hidden" id="error-message">
+                        City not found. Please try another location.
+                    </div>
+                    
+                    <div class="loading-spinner hidden" id="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </main>
+            
+            <footer>
+                <p>Created with ❤️ | Weather data from WeatherAPI.com</p>
+                <button id="install-btn" class="install-btn hidden">Install App</button>
+            </footer>
+        </div>
+    </div>
+    
+    <div class="voice-search-modal" id="voice-search-modal">
+        <div class="voice-search-content">
+            <h3>Listening...</h3>
+            <div class="voice-animation">
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+                <div class="voice-bar"></div>
+            </div>
+            <p id="voice-search-text">Say a city name...</p>
+            <button id="voice-search-close">Cancel</button>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="weather-animations.js"></script>
+    <script src="script.js"></script>
+    <script src="modern-features.js"></script>
+</body>
+</html>
